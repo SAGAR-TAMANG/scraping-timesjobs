@@ -53,30 +53,33 @@ def main():
                 # TITLE
                 title = i.find('a')
                 title = title.text
-                # print(title.encode('utf-8'))
+                print(title.encode('utf-8'))
                 
                 # Description
                 description = i.find('label').next_sibling
-                # print(description)
+                print(description)
 
                 # COMPANY
                 company = i.find('h3', class_='joblist-comp-name')
                 company = company.text
-                # print(company.encode('utf-8'))
+                print(company.encode('utf-8'))
 
                 # Exp
                 Exp = i.find('i', class_='material-icons').next_sibling
-                # print(Exp)
+                print(Exp)
 
                 # City
-                City = i.find('span')
-                # City = City.text
-                # print(City)
+                tempo = i.find_all('i', class_='material-icons')
+                if len(tempo) > 2:
+                    City = tempo[1].next_sibling
+                else:
+                    City = None
+                print(City)
 
                 # Date Posted
                 Date = i.find('span', class_='sim-posted')
-                Date = Date.text
-                # print(Date)
+                Date = Date.text.strip()
+                print(Date)
 
                 URL = i.find('a').get('href')
                 # print(URL)
@@ -87,9 +90,14 @@ def main():
                 except Exception as e:
                     print("EXCEPTION OCCURRED AT SALARY")
                     exception = exception + 1
+                    Salary = 'Not Mentioned'
+                
+                if page_counter == 0:
+                    dff = pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])
+                else:
+                    dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
 
-                dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
-                print(dff)
+                dff.to_excel('TimesJobs_' + str(datetime.date.today()) + '.xlsx')
             driver.execute_script("window.scrollTo(0,(document.body.scrollHeight))")
             scroll_time = 1
             time.sleep(scroll_time)
