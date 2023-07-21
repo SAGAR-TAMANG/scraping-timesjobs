@@ -1,0 +1,24 @@
+XPATH Observation:
+
+2: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[2]/a
+3: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[3]/a
+4: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[4]/a
+
+10: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[10]
+NEXT 10: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[11]/a
+
+12: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[3]/a
+13: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[4]/a
+20: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[11]/a
+
+NEXT: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[12]/a
+
+22: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[3]/a
+30: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[11]/a
+
+NEXT: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[12]/a
+
+32: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[3]/a
+40: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[11]/a
+
+NEXT: /html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[12]/a

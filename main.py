@@ -7,15 +7,16 @@ import numpy as np
 import time
 import datetime
 
-def main():
-    dff = pd.DataFrame(columns = ['Job Title', 'Experience Reqd', 'City', 'Date Posted', 'URL'])
+dff = pd.DataFrame(columns = ['Job Title', 'Experience Reqd', 'City', 'Date Posted', 'URL'])
 
+def main():
+    
     driver = webdriver.Chrome()
 
     url = 'https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=&txtLocation=India#'
     driver.get(url)
 
-    # print(driver.page_source)
+    # print(driver.page_source) 
     
     try:
        driver.find_element(By.XPATH, '/html/body/div[4]/div[1]/table/tbody/tr/td[2]/div/span').click()
@@ -31,54 +32,76 @@ def main():
 
     result = soup.find('ul', class_='new-joblist')
     result2 = result.find_all('li', class_='clearfix job-bx wht-shd-bx')
-
+    
+    page_counter = 0
+    
     # print(result2)
+    pages = np.arange(1, 25)
 
-    pages = np.arange(1, 2)
+    exception = 0
+
     for page in pages:
-      for i in result2: 
-          # TITLE
-          title = i.find('a')
-          title = title.text
-          print(title.encode('utf-8'))
-          
-          # Description
-          description = i.find('label').next_sibling
+        if page_counter == 0:
+            next_counter = 0 
+        else:
+            next_counter = 1
+        
+        page_next_counter = np.arange(2,12)
 
-          # COMPANY
-          company = i.find('h3', class_='joblist-comp-name')
-          company = company.text
-          print(company.encode('utf-8'))
+        for page_next in page_next_counter:
+            for i in result2:
+                # TITLE
+                title = i.find('a')
+                title = title.text
+                # print(title.encode('utf-8'))
+                
+                # Description
+                description = i.find('label').next_sibling
+                # print(description)
 
-          # Exp
-          Exp = i.find('i', class_='material-icons').next_sibling
-          print(Exp)
+                # COMPANY
+                company = i.find('h3', class_='joblist-comp-name')
+                company = company.text
+                # print(company.encode('utf-8'))
 
-          # City
-          City = i.find('span')
-          # City = City.text
-          print(City)
+                # Exp
+                Exp = i.find('i', class_='material-icons').next_sibling
+                # print(Exp)
 
-          # Date Posted
-          Date = i.find('span', class_='sim-posted')
-          Date = Date.text
-          print(Date)
+                # City
+                City = i.find('span')
+                # City = City.text
+                # print(City)
 
-          URL = i.find('a').get('href')
-          print(URL)
+                # Date Posted
+                Date = i.find('span', class_='sim-posted')
+                Date = Date.text
+                # print(Date)
 
-          Salary = i.find('i', class_="material-icons rupee").next_sibling
+                URL = i.find('a').get('href')
+                # print(URL)
 
-          dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
-          print(dff)
-      driver.execute_script("window.scrollTo(0,(document.body.scrollHeight))")
+                try:
+                    Salary = i.find('i', class_="material-icons rupee").next_sibling
+                    # print(Salary)
+                except Exception as e:
+                    print("EXCEPTION OCCURRED AT SALARY")
+                    exception = exception + 1
 
-      scroll_time = 1
-      time.sleep(scroll_time)
+                dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
+                print(dff)
+            driver.execute_script("window.scrollTo(0,(document.body.scrollHeight))")
+            scroll_time = 1
+            time.sleep(scroll_time)
+            
+            page_counter = page_counter + 1
 
-      driver.find_element(By.XPATH, '/html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[2]/a').click()
+            final_page_next = next_counter + page_next
+            driver.find_element(By.XPATH, '/html/body/div[3]/div[4]/section/div[2]/div[2]/div[4]/em[' + str(final_page_next) + ']/a').click()
 
-      loading_time = 3
-      time.sleep(loading_time)
+            loading_time = 3
+            time.sleep(loading_time)
+
+            print('NUMBER OF EXCEPTIONS: ', exception)
     dff.to_excel('TimesJobs_' + str(datetime.date.today()) + '.xlsx')
 main()
