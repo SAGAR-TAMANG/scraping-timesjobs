@@ -4,12 +4,12 @@ from bs4 import BeautifulSoup
 
 import pandas as pd
 import numpy as np 
-import time
+import time 
 import datetime
 
 def main():
 
-    dff = pd.DataFrame(columns = ['Job Title', 'Experience Reqd', 'City', 'Date Posted', 'URL'])
+    dff = pd.DataFrame(columns = ['Job Title', 'Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])
     
     driver = webdriver.Chrome()
 
@@ -56,13 +56,16 @@ def main():
                 print(title.encode('utf-8'))
                 
                 # Description
-                description = i.find('label').next_sibling
+                description = i.find('label').next_sibling.strip()
                 print(description)
 
                 # COMPANY
-                company = i.find('h3', class_='joblist-comp-name')
-                company = company.text
-                print(company.encode('utf-8'))
+                text = i.find('h3', class_='joblist-comp-name')
+                text = text.text
+                initial_company = text.find('(')
+                Company = text[:initial_company]
+                Company = Company.strip()
+                print(Company)
 
                 # Exp
                 Mat_icons = i.find_all('i', class_='material-icons')
@@ -90,7 +93,7 @@ def main():
                     exception = exception + 1
                     Salary = 'Not Mentioned'
                 
-                dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
+                dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, Company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
 
                 dff.to_excel('TimesJobs_' + str(datetime.date.today()) + '.xlsx')
             
