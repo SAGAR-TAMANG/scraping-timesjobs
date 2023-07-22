@@ -7,9 +7,9 @@ import numpy as np
 import time
 import datetime
 
-dff = pd.DataFrame(columns = ['Job Title', 'Experience Reqd', 'City', 'Date Posted', 'URL'])
-
 def main():
+
+    dff = pd.DataFrame(columns = ['Job Title', 'Experience Reqd', 'City', 'Date Posted', 'URL'])
     
     driver = webdriver.Chrome()
 
@@ -93,6 +93,8 @@ def main():
                 dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
 
                 dff.to_excel('TimesJobs_' + str(datetime.date.today()) + '.xlsx')
+            
+            dff.to_excel('TimesJobs_' + str(datetime.date.today()) + '.xlsx')
             driver.execute_script("window.scrollTo(0,(document.body.scrollHeight))")
             scroll_time = 1
             time.sleep(scroll_time)
@@ -106,5 +108,5 @@ def main():
             time.sleep(loading_time)
 
             print('NUMBER OF EXCEPTIONS: ', exception)
-    dff.to_excel('TimesJobs_' + str(datetime.date.today()) + '.xlsx')
+            
 main()
