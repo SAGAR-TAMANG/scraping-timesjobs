@@ -59,7 +59,8 @@ for i in result2:
     # print(Exp)
 
     # City
-    City = Mat_icons[2].next_sibling
+    spans = i.find_all('span')
+    City = spans[1].text
 
     # Date Posted
     Date = i.find('span', class_='sim-posted')

@@ -65,16 +65,14 @@ def main():
                 print(company.encode('utf-8'))
 
                 # Exp
-                Exp = i.find('i', class_='material-icons').next_sibling
-                print(Exp)
+                Mat_icons = i.find_all('i', class_='material-icons')
+                # print('THIS IS MATERIAL ICONS:', Mat_icons)
+                Exp = Mat_icons[0].next_sibling.text.strip()
+                # print(Exp)
 
                 # City
-                tempo = i.find_all('i', class_='material-icons')
-                if len(tempo) > 2:
-                    City = tempo[1].next_sibling
-                else:
-                    City = None
-                print(City)
+                spans = i.find_all('span')
+                City = spans[1].text
 
                 # Date Posted
                 Date = i.find('span', class_='sim-posted')
@@ -92,10 +90,7 @@ def main():
                     exception = exception + 1
                     Salary = 'Not Mentioned'
                 
-                if page_counter == 0:
-                    dff = pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])
-                else:
-                    dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
+                dff = pd.concat([dff, pd.DataFrame([[title, description , Exp, company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
 
                 dff.to_excel('TimesJobs_' + str(datetime.date.today()) + '.xlsx')
             driver.execute_script("window.scrollTo(0,(document.body.scrollHeight))")
